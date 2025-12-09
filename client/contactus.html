@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Recipe Site</title>
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* * --- Warm Color Palette (Copied from your styles.css) ---
+         * Place this block in your global styles.css, not here, for consistency.
+         * I'm including it here for a quick testable page.
+         */
+        :root {
+            --warm-cream: #fbfbfb;      
+            --warm-light: #f7f2e8;      
+            --warm-medium: #8b4513;     
+            --warm-dark: #3a220e;       
+            --warm-accent: #e57373;     
+            --warm-button-bg: #d2691e;  
+            --warm-button-hover: #b95d1a;
+        }
+
+        /* --- Custom Styles for Recipe-Friendly Form --- */
+        
+        #contact-form-container {
+            min-height: 100vh; /* Ensure the container covers the whole screen */
+            padding: 60px 20px;
+            background-color: var(--warm-light); 
+        }
+
+        .contact-form-warm {
+            background-color: var(--warm-cream);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+            border: 1px solid var(--warm-light);
+        }
+
+        .contact-form-warm h2 {
+            color: var(--warm-dark);
+        }
+        
+        /* 🛑 Increased Spacing between groups */
+        .contact-form-warm > div {
+            margin-bottom: 2rem !important; 
+        }
+
+        /* 🛑 Recipe-friendly Labels */
+        .contact-form-warm label {
+            display: block;
+            color: var(--warm-dark) !important; 
+            font-size: 1rem !important; 
+            padding-bottom: 0.25rem; 
+            border-bottom: 1px dashed var(--warm-light); 
+            margin-bottom: 0.75rem !important; 
+            font-family: serif; /* Use a serif font for a classic look */
+        }
+
+        /* Input Fields (Textarea, Input) */
+        .input-field-warm {
+            padding: 0.75rem 1rem !important; 
+            border-color: var(--warm-light); 
+            color: var(--warm-medium);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-field-warm:focus {
+            outline: none;
+            border-color: var(--warm-accent); 
+            box-shadow: 0 0 0 3px rgba(229, 115, 115, 0.4); 
+        }
+
+        /* Submit Button */
+        .warm-button {
+            background-color: var(--warm-button-bg);
+            color: var(--warm-cream); 
+            letter-spacing: 0.5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .warm-button:hover {
+            background-color: var(--warm-button-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Status Messages (Success/Error) */
+        .text-green-600 { color: #38761d; } 
+        .text-red-600 { color: #cc0000; }  
+    </style>
+</head>
+<body>
+<div class="upload-container">
+<button class="btn btn-back" onclick="history.back()">← Back</button>
+<div id="contact-form-container">
+    <form id="contact-form" class="max-w-xl mx-auto p-8 rounded-lg contact-form-warm">
+        <h2 class="text-3xl font-serif font-bold mb-8 text-center text-warm-dark">
+            Got a Question? We'd Love to Hear From You!
+        </h2>
+        <div class="mb-5">
+            <label for="contact-name">Your Name</label>
+            <input type="text" id="contact-name" name="name" class="w-full border-2 rounded-lg input-field-warm focus:ring-warm-accent" required>
+        </div>
+        <div class="mb-5">
+            <label for="contact-email">Your Email</label>
+            <input type="email" id="contact-email" name="email" class="w-full border-2 rounded-lg input-field-warm focus:ring-warm-accent" required>
+        </div>
+        <div class="mb-6">
+            <label for="contact-message">Your Query / Message</label>
+            <textarea id="contact-message" name="message" rows="6" class="w-full border-2 rounded-lg input-field-warm focus:ring-warm-accent" required></textarea>
+        </div>
+        <button type="submit" id="contact-submit-btn" class="w-full py-3 px-4 rounded-lg font-bold transition duration-300 warm-button">Submit Query</button>
+        <p id="contact-message-status" class="mt-4 text-center text-sm"></p>
+    </form>
+</div>
+
+<script src="app.js"></script> 
+
+</body>
+</html>

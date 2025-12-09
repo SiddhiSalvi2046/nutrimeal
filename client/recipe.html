@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Details</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  <header class="topbar">
+    <button onclick="window.history.back()">← Back</button>
+    <div class="center">🍲 NutriMeal</div>
+  </header>
+
+  <main id="recipe-content" class="p-6">
+    <div class="recipes-grid"></div>
+    <div class="recipe-image-wrapper"></div>
+    <!-- JS will fill recipe details here -->
+  </main>
+  
+
+  
+<!-- Add this near the bottom of body -->
+<div id="mealModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Add to Meal Planner</h3>
+    <input type="hidden" id="modal-recipe-id">
+    
+    <label for="meal-day">Select Day:</label>
+    <select id="meal-day">
+      <option value="Monday">Monday</option>
+      <option value="Tuesday">Tuesday</option>
+      <option value="Wednesday">Wednesday</option>
+      <option value="Thursday">Thursday</option>
+      <option value="Friday">Friday</option>
+      <option value="Saturday">Saturday</option>
+      <option value="Sunday">Sunday</option>
+    </select>
+    
+    <label for="meal-type">Select Meal Type:</label>
+    <select id="meal-type">
+      <option value="breakfast">Breakfast</option>
+      <option value="lunch">Lunch</option>
+      <option value="dinner">Dinner</option>
+      <option value="snacks">Snacks</option>
+    </select>
+    
+    <div class="modal-foot">
+             <button class="btn primary" id="confirmAddToPlan">Add to Planner</button> </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Existing Modal Styles */
+.modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 100; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background: rgba(0,0,0,0.5); 
+}
+.modal-content { 
+    background: #fff; 
+    margin: 15% auto; 
+    padding: 20px; 
+    border-radius: 8px; 
+    width: 300px; 
+    text-align: center; 
+}
+.close { 
+    float: right; 
+    font-size: 20px; 
+    cursor: pointer; 
+}
+
+/* --- NEW STYLES FOR CONTENT --- */
+.modal-content label {
+    display: block; 
+    margin-top: 15px; 
+    font-weight: 600; 
+    text-align: left; /* Aligns label text to the left */
+}
+.modal-content select {
+    width: 100%; 
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.modal-foot {
+    margin-top: 20px;
+}
+</style>
+
+
+ 
+  <script src="recipe.js"></script>
+  <!-- Custom Popup -->
+<div id="customPopup" class="popup">
+  <div class="popup-content">
+    <span id="closePopup" class="close">&times;</span>
+    <p id="popupMessage"></p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <i><title>NutriMeal</title></i>
+  <link rel="stylesheet" href="style.css" />
+<style>
+/*.main-content {
+    padding-top: 0px; 
+    margin-top: 0;
+}
+.hero-section {
+    position: relative;
+    margin-top: 0;
+    height: 450px; 
+    background-image: url('https://wallpapers.com/images/featured/food-4k-1pf6px6ryqfjtnyr.jpg'); 
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+.hero-tagline {
+    font-size: 3.8rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 1);
+    line-height: 1.1;
+}
+.hero-subtitle {
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+.hero-search {
+    display: flex;
+    width: 90%;
+    max-width: 700px;
+    background: #fff;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+#main-search-input {
+    flex-grow: 1;
+    padding: 15px 25px;
+    border: none;
+    font-size: 1.1rem;
+    outline: none;
+}
+#main-search-btn {
+    background-color: var(--button-color, #FFD700);
+    color: var(--dark-text, #2c3e50);
+    border: none;
+    padding: 15px 25px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.2s;
+}
+#main-search-btn:hover {
+    background-color: #FFC000;
+}
+
+@media (max-width: 768px) {
+    .hero-section { height: 350px; }
+    .hero-tagline { font-size: 2.5rem; }
+    .hero-subtitle { font-size: 1.2rem; }
+    .category-section { padding: 20px; }
+    .hero-search { max-width: 500px; }
+    #main-search-input, #main-search-btn { padding: 12px 20px; }
+}
+@media (max-width: 480px) {
+    .hero-section { height: 300px; }
+    .hero-tagline { font-size: 1.8rem; }
+    .hero-subtitle { font-size: 1rem; }
+    .category-card h3 { font-size: 1.4rem; }
+}*/
+.visual-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+.visual-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.visual-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(250, 248, 248);
+  text-align: center;
+  background: rgba(0,0,0,0.4); 
+  padding: 20px 30px;
+  border-radius: 10px;
+}
+.visual-overlay h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; 
+}/*
+.hero-section {
+    height: 100vh; 
+    margin: 0; 
+    padding: 0;
+    background-image: url('d49d02b8-3083-400d-a9a8-5db1c293506a.png'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-tagline {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fffdfd;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}*/
+</style>
+</head>
+<script>
+window.addEventListener("load", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has("noSplash")) {
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("app").classList.remove("hidden");
+    return;
+  }
+
+  setTimeout(() => {
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("app").classList.remove("hidden");
+  }, 2000);
+});
+</script>
+<body>
+  <div id="splash">
+    <h1 class="splash-logo">🍲 NutriMeal</h1>
+  </div>
+  <div id="app" class="hidden" aria-live="polite">
+     <section id="home-page"></section>
+    <header class="topbar">
+      <div class="left">
+        <button id="hamburgerBtn" class="hamburger">☰</button>
+      </div>
+        <div class="center brand">🍲 <strong>NutriMeal</strong></div>
+      <!-- Right: Actions -->
+  <div class="right actions">
+    <!-- Search -->
+    <button id="search-icon" title="Search" aria-label="Search">🔍</button>
+    <!-- Dark/Light Mode Toggle -->
+    <button id="themeToggle" title="Toggle Theme" aria-label="Toggle Theme">🌙</button>
+        <button id="profileBtn" aria-haspopup="menu" aria-expanded="false" title="Account">👤</button>
+        <div id="profileMenu" class="profile-menu-dropdown hidden" role="menu" aria-hidden="true">
+          <button id="openSignup" role="menuitem">Sign Up</button>
+          <button id="openLogin" role="menuitem">Log In</button>
+          <a href="dashboard.html" id="dashboardLink" class="menu-item hidden" role="menuitem">Dashboard 📊</a>
+          <a href="admin-dashboard.html" id="adminMenuLink" class="menu-item hidden" role="menuitem">Admin Panel 🔑</a>
+          <button id="logoutBtn" role="menuitem" class="hidden">Log Out</button> 
+        </div>
+      </div>
+      <div id="welcome-message"></div>
+    </header>
+<div id="search-wrapper" class="search-wrapper">
+  <input type="text" id="search-input" placeholder="Search recipes...">
+  <div id="search-results" class="search-results"></div>
+</div>
+    <!-- Side menu -->
+    <nav id="sideMenu" class="side-menu">
+      <button class="close" data-close="sideMenu">✕</button>
+      <ul>
+        <li><a href="index.html">🏠 Home</a></li>
+        <!-- Recipes with submenus -->
+        <li class="has-submenu">
+          <span>📖 Recipes</span>
+          <ul class="submenu">
+            <li class="has-submenu">
+              <span>🍽️ Meal Type</span>
+              <ul class="submenu">
+                <li><a href="recipe.html?category=Meal Type&subtype=Breakfast">Breakfast 🍳</a></li>
+                <li><a href="recipe.html?category=Meal Type&subtype=Lunch">Lunch 🥗</a></li>
+                <li><a href="recipe.html?category=Meal Type&subtype=Dinner">Dinner 🍲</a></li>
+                <li><a href="recipe.html?category=Meal Type&subtype=Snack">Snacks 🍿</a></li>
+                <li><a href="recipe.html?category=Meal Type&subtype=Dessert">Desserts 🍰</a></li>
+              </ul>
+            </li>
+            <li class="has-submenu">
+              <span>🌤️ Seasonal Recipes</span>
+              <ul class="submenu">
+                <li><a href="recipe.html?category=Seasonal Recipes&subtype=Summer">Summer ☀️</a></li>
+                <li><a href="recipe.html?category=Seasonal Recipes&subtype=winter">Winter ❄️</a></li>
+                <li><a href="recipe.html?category=Seasonal Recipes&subtype=Spring">Spring 🌸</a></li>
+                <li><a href="recipe.html?category=Seasonal Recipes&subtype=Autumn">Autumn 🍂</a></li>
+              </ul>
+            </li>
+            <li class="has-submenu">
+              <span>🎉 Occasional Recipes</span>
+              <ul class="submenu">
+                <li><a href="recipe.html?category=Occasional Recipes&subtype=Festivals">Festivals 🎊</a></li>
+                <li><a href="recipe.html?category=Occasional Recipes&subtype=Parties">Parties 🎂</a></li>
+                <li><a href="recipe.html?category=Occasional Recipes&subtype=Quick Weeknight Meal">Quick Weeknight Meals ⏱️</a></li>
+              </ul>
+            </li>
+
+            <li class="has-submenu">
+              <span>🥘 One-Pot / Easy Cooking</span>
+              <ul class="submenu">
+                <li><a href="recipe.html?category=One-pot/Easy cooking&subtype=One-pot Meals">One-Pot Meals</a></li>
+                <li><a href="recipe.html?category=One-pot/Easy cooking&subtype=30-Minute Recipes">30-Minute Recipes ⏱️</a></li>
+                <li><a href="recipe.html?category=One-pot/Easy cooking&subtype=Slow Cooker">Slow Cooker / Instant Pot</a></li>
+              </ul>
+            </li>
+
+            <li class="has-submenu">
+              <span>🍗 Veg / Non-Veg Options</span>
+              <ul class="submenu">
+                <li><a href="recipe.html?category=Veg/Non-Veg&subtype=Vegetarian">Vegetarian 🥕</a></li>
+                <li><a href="recipe.html?category=Veg/Non-Veg&subtype=Non-Veg">Non-Vegetarian 🍖</a></li>
+                <li><a href="recipe.html?category=Veg/Non-Veg&subtype=Egg Based">Egg-based 🍳</a></li>
+              </ul>
+            </li>
+      </ul>
+    </li>
+    <!-- Cuisine with submenus -->
+    <li class="has-submenu">
+      <span>🌍 Cuisine </span>
+      <ul class="submenu">
+        <li><a href="cuisine.html?cuisine=Italian">Italian 🍝</a></li>
+        <li><a href="cuisine.html?cuisine=Chinese">Chinese 🥡</a></li>
+        <li><a href="cuisine.html?cuisine=Mexican">Mexican 🌮</a></li>
+        <li><a href="cuisine.html?cuisine=Mediterranean">Mediterranean 🥙</a></li>
+        <li><a href="cuisine.html?cuisine=American">American 🍔</a></li>
+        <li><a href="cuisine.html?cuisine=Thai">Thai 🍜</a></li>
+        <li><a href="cuisine.html?cuisine=Japanese">Japanese 🍣</a></li>
+
+      </ul>
+    </li>
+        <!--<li><a href="community.html">👥 Community</a></li>-->
+        <li><a href="aboutus.html">ℹ️ About Us</a></li>
+        <!--<li><a href="settings.html">⚙️ Settings</a></li>-->
+      </ul>
+    </nav>
+   
+    <!-- profile-->
+     <div id="signupModal" class="modal hidden" role="dialog" aria-hidden="true" aria-labelledby="signupTitle">
+      <div class="modal-card auth">
+        <div class="modal-head">
+          <h3 id="signupTitle">Create an account</h3>
+          <button class="close" data-close="signupModal" aria-label="Close">✕</button>
+        </div>
+        <form id="signupForm" novalidate>
+          <label for="suUsername">Username</label>
+          <input id="suUsername" name="username" type="text" placeholder="e.g.,foodie_01" required />
+          <label for="suEmail">Email</label>
+          <input id="suEmail" name="email" type="email" placeholder="you@example.com" required />
+          <label for="suPassword">Password</label>
+          <input id="suPassword" name="password" type="password" placeholder="Min 6 characters" minlength="6" required />
+          <!-- Simple built-in CAPTCHA -->
+          <div class="captcha-row">
+            <label>Captcha</label>
+            <div class="captcha-box">
+              <span id="captchaText" aria-live="polite">ABC123</span>
+              <button type="button" id="refreshCaptcha" title="Refresh captcha" aria-label="Refresh captcha">↻</button>
+            </div>
+          </div>
+          <input id="suCaptcha" name="captcha" type="text" placeholder="Type the text above" required />
+          <!-- Where Google reCAPTCHA would go later:
+          <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+          <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+          -->
+          <div class="form-actions">
+            <button type="button" class="btn secondary" data-close="signupModal">Cancel</button>
+            <button type="submit" class="btn primary" >Sign Up</button>
+          </div>
+        </form>
+        <p class="switch-auth">Already have an account? <button class="link" id="toLogin">Log In</button></p>
+      </div>
+    </div>
+    <div id="loginModal" class="modal hidden" role="dialog" aria-hidden="true" aria-labelledby="loginTitle">
+      <div class="modal-card auth">
+        <div class="modal-head">
+          <h3 id="loginTitle">Welcome back</h3>
+          <button class="close" data-close="loginModal" aria-label="Close">✕</button>
+        </div>
+        <form id="loginForm" novalidate>
+          <label for="liUsername">Username</label>
+          <input id="liUsername" name="username" type="text" placeholder="Your username" required />
+          <label for="liPassword">Password</label>
+          <input id="liPassword" name="password" type="password" placeholder="Your password" required />
+          <div class="form-actions">
+            <button type="button" class="btn-secondary close" data-close="loginModal">Cancel</button>
+            <button type="submit" class="btn-primary">Log In</button>
+          </div>
+        </form>
+        <p class="switch-auth">New here? <button class="link" id="toSignup">Create an account</button></p>
+      </div>
+    </div>
+    <div id="app" class="app">
+        <main class="main-content">
+<section class="visual-section">
+  <img src="https://wallpapers.com/images/featured/food-4k-1pf6px6ryqfjtnyr.jpg" 
+       alt="Delicious Dish" class="visual-img">
+  <div class="visual-overlay">
+    <h2>"Cooking made simple, healthy & joyful"</h2>
+  </div>
+</section>                        
+</main>  
+</div>
+<script src="app.js"></script>
+<div id="customPopup" class="popup">
+  <div class="popup-content">
+    <span id="closePopup" class="close">&times;</span>
+    <p id="popupMessage"></p>
+  </div>
+</div>
+</body>
+</html>

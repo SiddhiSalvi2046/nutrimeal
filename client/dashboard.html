@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    .topbar {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1000;
+    }
+    .footer-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-around;
+        background: #fff;
+        border-top: 1px solid #ddd;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+    .footer-nav button {
+        flex: 1;
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+    }
+    .section {
+        display: none;
+        padding: 1rem;
+        min-height: calc(100vh - 120px);
+        padding-bottom: 80px;
+    }
+    .section.active {
+        display: block;
+        padding-bottom: 50px
+    }
+    #recommendations {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    .recipe-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        text-align: center;
+    }
+    .recipe-card img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        display: block;
+    }
+    .profile-menu.show {
+        display: block;
+    }
+    :root {
+        --color-primary: #1F2837;
+        --color-accent: #E06C4C;
+        --color-light: #F8F8F8;
+        --color-text-dark: #333;
+        --color-text-light: #fff;
+        --color-border: #ddd;
+    }
+    .right.actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .profile-icon-container {
+        cursor: pointer;
+        position: relative;
+        z-index: 1001;
+    }
+    .profile-avatar-icon {
+        width: 35px; 
+        height: 35px;
+        border-radius: 50%; 
+        object-fit: cover;
+        border: 2px solid var(--color-accent); 
+        background-color: var(--color-light); 
+        display: flex; 
+        align-items: center;
+        justify-content: center;
+        font-size: 18px; 
+        color: black; 
+    }
+    .profile-avatar-img { 
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--color-accent);
+    }
+    .modal-overlay {
+        display: none; 
+        position: fixed;
+        z-index: 3000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); 
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-content {
+        background-color: var(--color-light);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        width: 90%;
+        max-width: 350px;
+        max-height: 80vh; 
+        overflow-y: auto;
+        position: relative;
+    }
+    .modal-header {
+        color: var(--color-primary);
+        border-bottom: 2px solid var(--color-accent);
+        padding-bottom: 10px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-size: 1.4em;
+    }
+    .close-button {
+        color: var(--color-text-dark);
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 5px;
+        right: 15px;
+        cursor: pointer;
+    }
+    .close-button:hover { color: var(--color-accent); }
+    .avatar-section { 
+        text-align: center; 
+        margin-bottom: 25px; 
+    }
+    .large-avatar-placeholder {
+        width: 90px;
+        height: 90px;
+        background-color: #eee;
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: var(--color-primary);
+        border: 3px solid var(--color-primary);
+    }
+    .avatar-section .upload-btn {
+        background-color: var(--color-primary);
+        color: var(--color-text-light);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+        position: static;
+        box-shadow: none;
+    }
+    .avatar-section .upload-btn:hover { background-color: #3f4a5c; }
+    .user-detail-section { 
+        padding: 0 10px; 
+        margin-bottom: 20px;
+    }
+    .user-detail-section label {
+        display: block;
+        margin-top: 10px;
+        color: var(--color-primary);
+        font-size: 0.9em;
+        font-weight: bold;
+    }
+    .user-detail-section input[type="text"],
+    .user-detail-section input[type="email"] {
+        width: 100%; 
+        box-sizing: border-box;
+        padding: 8px;
+        border: 1px solid var(--color-border);
+        border-radius: 4px;
+        margin-bottom: 15px;
+        background-color: var(--color-light); 
+        color: var(--color-text-dark);
+        font-weight: bold;
+    }
+    .user-detail-section input:disabled {
+        border-color: transparent; 
+        background-color: #f0f0f0; 
+        cursor: default;
+    }
+    #editProfileBtn {
+        margin-top: 10px;
+        width: 100%;
+    }
+    .modal-actions {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    .btn {
+        text-align: center;
+        padding: 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        display: block; 
+    }
+    .btn-primary { background-color: var(--color-accent); color: var(--color-text-light); }
+    .btn-secondary { background-color: var(--color-primary); color: var(--color-text-light); }
+    .btn-logout {
+        background-color: var(--color-light);
+        color: var(--color-text-dark);
+        border: 1px solid var(--color-text-dark);
+    }
+    .btn-logout:hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+    }
+    .section {
+        padding: 20px 0;
+        margin-bottom: 40px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .section:last-child {
+        border-bottom: none;
+    }
+    h1, h2 {
+        color: var(--dark-text);
+        font-weight: 700;
+    }
+    h1 { 
+        font-size: 2.5rem; 
+        margin-bottom: 10px; 
+    }
+    h2 { 
+        font-size: 1.8rem; 
+        margin-bottom: 25px; 
+        border-left: 5px solid var(--button-color); 
+        padding-left: 15px; 
+    }
+    .tagline { 
+        font-size: 1.1rem; 
+        color: #6e6e6e; 
+        margin-bottom: 30px; 
+    }
+    .dashboard-hero-banner {
+        background-color: #e2a618;
+        border: 2px solid var(--button-color);
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 8px 15px rgba(255, 215, 0, 0.2); 
+        transition: transform 0.3s;
+        cursor: pointer;
+    }
+    .dashboard-hero-banner:hover {
+        transform: translateY(-2px); 
+        box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+    }
+    .banner-content h3 {
+        font-size: 1.8rem;
+        color: var(--dark-text);
+        margin-top: 0;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+    .banner-content p {
+        font-size: 1.1rem;
+        color: var(--text-color);
+        margin-bottom: 0;
+    }
+    .banner-image img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: var(--button-color); 
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+@media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.5rem; }
+    }
+@media (max-width: 600px) {
+        .dashboard-hero-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    .banner-image {
+        margin-top: 20px;
+    }
+    .banner-content h3 {
+        font-size: 1.4rem;
+    }
+    .banner-image img {
+        width: 70px;
+        height: 70px;
+    }
+}
+    #downloadMealPlanBtn {
+        position: relative; 
+        z-index: 2000; 
+        margin-top: 30px !important;
+        margin-bottom: 30px;
+    }
+</style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="left">
+            <button id="hamburgerBtn" class="hamburger">☰</button>
+        </div>
+        <div class="center brand">🍲 <strong>NutriMeal</strong></div>
+        <div class="right actions">
+            <button id="search-icon" title="Search" aria-label="Search">🔍</button>
+            <button id="themeToggle" title="Toggle Theme" aria-label="Toggle Theme">🌙</button>
+            <div class="profile-icon-container" onclick="toggleProfileModal()">
+        <i class="fas fa-user profile-avatar profile-avatar-icon"></i> 
+    </div>
+        </div>
+    </header>
+    <div id="search-wrapper" class="search-wrapper">
+        <input type="text" id="search-input" placeholder="Search recipes...">
+        <div id="search-results" class="search-results"></div>
+    </div>
+    <main id="sections">
+        <section id="home-section" class="section active">
+            <h1 id="welcome-text">Welcome , Chef!</h1>
+            <p class="tagline">Ready to achieve your nutritional goals today? 🍳✨</p>
+            <div class="dashboard-hero-banner">
+                <div class="banner-content">
+                    <h3>"Cook Today, Thrive Tomorrow."</h3>
+                    <p>Track your meals, explore new cuisines, and master your kitchen.</p>
+                </div>
+                <div class="banner-image">
+                    <img src="https://placehold.co/100x100/FFD700/2c3e50?text=GOAL%0A🎯" alt="Goal Icon">
+                </div>
+            </div>
+            <h2>Recommended for you</h2>
+            <div id="recommendations"></div>
+        </section>
+        <section id="favourites-section" class="section">
+            <h2>Your Favourites ❤️</h2>
+            <div id="favourites-list-container">
+                <p>No favourites yet.</p>
+            </div>
+        </section>   
+        <section id="mealplan-section" class="section">
+    <h2>Weekly Meal Planner 📅</h2>
+    <div id="meal-plan-container">
+        <p>Your weekly plan will appear here after you add a recipe.</p>
+    </div>
+    <div id="shoppingListContainer" class="mb-3"></div> 
+    <div class="mealplan-actions">
+        
+       <button id="downloadMealPlanBtn" class="btn btn-success mt-3">
+    Download Meal Plan (PDF) 📄
+</button>
+    </div>
+</section>      
+        <section id="cuisine-section" class="section">
+            <h1 id="cuisine-title"></h1>
+            <div id="cuisine-container" class="recipes-grid"></div>
+        </section>
+    </main>
+
+    <nav id="sideMenu" class="side-menu">
+        <button class="close" data-close="sideMenu">✕</button>
+        <ul>
+            <li class="has-submenu">
+                <span>📖 Recipes</span>
+                <ul class="submenu">
+                    <li class="has-submenu">
+                        <span>🍽️ Meal Type</span>
+                        <ul class="submenu">
+                            <li><a href="recipe.html?category=Meal Type&subtype=Breakfast">Breakfast 🍳</a></li>
+                            <li><a href="recipe.html?category=Meal Type&subtype=Lunch">Lunch 🥗</a></li>
+                            <li><a href="recipe.html?category=Meal Type&subtype=Dinner">Dinner 🍲</a></li>
+                            <li><a href="recipe.html?category=Meal Type&subtype=Snack">Snacks 🍿</a></li>
+                            <li><a href="recipe.html?category=Meal Type&subtype=Dessert">Desserts 🍰</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <span>🌤️ Seasonal Recipes</span>
+                        <ul class="submenu">
+                            <li><a href="recipe.html?category=Seasonal Recipes&subtype=Summer">Summer ☀️</a></li>
+                            <li><a href="recipe.html?category=Seasonal Recipes&subtype=winter">Winter ❄️</a></li>
+                            <li><a href="recipe.html?category=Seasonal Recipes&subtype=Spring">Spring 🌸</a></li>
+                            <li><a href="recipe.html?category=Seasonal Recipes&subtype=Autumn">Autumn 🍂</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <span>🎉 Occasional Recipes</span>
+                        <ul class="submenu">
+                            <li><a href="recipe.html?category=Occasional Recipes&subtype=Festivals">Festivals 🎊</a></li>
+                            <li><a href="recipe.html?category=Occasional Recipes&subtype=Parties">Parties 🎂</a></li>
+                            <li><a href="recipe.html?category=Occasional Recipes&subtype=Quick Weeknight Meal">Quick Weeknight Meals ⏱️</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <span>🥘 One-Pot / Easy Cooking</span>
+                        <ul class="submenu">
+                            <li><a href="recipe.html?category=One-pot/Easy cooking&subtype=One-pot Meals">One-Pot Meals</a></li>
+                            <li><a href="recipe.html?category=One-pot/Easy cooking&subtype=30-Minute Recipes">30-Minute Recipes ⏱️</a></li>
+                            <li><a href="recipe.html?category=One-pot/Easy cooking&subtype=Slow Cooker">Slow Cooker / Instant Pot</a></li>
+                        </ul>
+                    </li>
+                    <li class="has-submenu">
+                        <span>🍗 Veg / Non-Veg Options</span>
+                        <ul class="submenu">
+                            <li><a href="recipe.html?category=Veg/Non-Veg&subtype=Vegetarian">Vegetarian 🥕</a></li>
+                            <li><a href="recipe.html?category=Veg/Non-Veg&subtype=Non-Veg">Non-Vegetarian 🍖</a></li>
+                            <li><a href="recipe.html?category=Veg/Non-Veg&subtype=Egg Based">Egg-based 🍳</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="has-submenu">
+                <span>🌍 Cuisine </span>
+                <ul class="submenu">
+                    <li><a href="cuisine.html?cuisine=Italian">Italian 🍝</a></li>
+                    <li><a href="cuisine.html?cuisine=Chinese">Chinese 🥡</a></li>
+                    <li><a href="cuisine.html?cuisine=Mexican">Mexican 🌮</a></li>
+                    <li><a href="cuisine.html?cuisine=Mediterranean">Mediterranean 🥙</a></li>
+                    <li><a href="cuisine.html?cuisine=American">American 🍔</a></li>
+                    <li><a href="cuisine.html?cuisine=Thai">Thai 🍜</a></li>
+                    <li><a href="cuisine.html?cuisine=Japanese">Japanese 🍣</a></li>
+                </ul>
+            </li>
+            <li><a href="upload_recipe.html">➕ Upload Recipe</a></li>
+            <li><a href="aboutus.html">ℹ️ About Us</a></li>
+            <li><a href="contactus.html">📧 Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <div id="profileModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="toggleProfileModal()">&times;</span>
+            <h3 class="modal-header">My Profile</h3>
+            <div class="avatar-section">
+                <div class="large-avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+                <button class="upload-btn" onclick="alert('Picture upload triggered!')">Upload/Change Picture</button> 
+            </div>
+
+            <div class="user-detail-section">
+    <label for="profileName"><strong>Name:</strong></label>
+    <input type="text" id="profileName" value="Anthony Webb" disabled>
+    <label for="profileEmail"><strong>Email:</strong></label>
+    <input type="email" id="profileEmail" value="myemail@address.com" disabled>
+    <button id="editProfileBtn" class="btn btn-primary" onclick="toggleEditMode(this)">Edit Profile</button>
+</div>
+            <div class="modal-actions">
+                <button class="btn btn-logout" onclick="logoutUser()">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-nav">
+        <button data-target="home-section">🏠</button>
+        <button data-target="favourites-section">❤️</button>
+        <button data-target="mealplan-section">📅</button>
+        
+    </footer>
+    <script src="dashboard.js"></script>
+    <!-- Custom Popup -->
+<div id="customPopup" class="popup">
+  <div class="popup-content">
+    <span id="closePopup" class="close">&times;</span>
+    <p id="popupMessage"></p>
+  </div>
+</div>
+</body>
+</html>
+

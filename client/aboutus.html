@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About NutriMeal - Your Healthy Recipe Hub</title>
+    <style>
+        /* Reusing and enhancing styles for consistency and eye-catching design */
+        :root {
+            --light-yellow: #FFFACD;
+            --soft-cream: #FDF9E5;
+            --text-color: #4A4A4A; /* Slightly darker for better readability */
+            --dark-text: #2c3e50;
+            --accent-color: #FFD700; /* Gold */
+            --light-accent: #FFEB80; /* Lighter gold */
+            --border-color: #E0E0D6;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --subtle-shadow: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-yellow);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px; /* Slightly wider for more content */
+            background-color: var(--soft-cream);
+            padding: 50px; /* More padding */
+            border-radius: 18px;
+            box-shadow: 0 12px 35px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            gap: 35px; /* More space between sections */
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-content h1 {
+            color: var(--dark-text);
+            font-weight: 800; /* Extra bold */
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+            font-size: 3.2rem; /* Larger */
+            animation: slideInFromTop 0.8s ease-out;
+        }
+
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-content p {
+            font-size: 1.15rem; /* Larger text for intro */
+            max-width: 700px;
+            margin: 0 auto 30px auto;
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        h3 {
+            color: var(--dark-text);
+            font-weight: 700; /* Bolder */
+            margin: 0 0 15px 0;
+            font-size: 1.8rem; /* Larger */
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h3::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 80px; /* Shorter, more aesthetic line */
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        p {
+            font-size: 1.05rem; /* Slightly larger base paragraph text */
+            color: var(--text-color);
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .section-block {
+            margin-bottom: 25px;
+            padding: 30px; /* More internal padding */
+            background-color: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px var(--subtle-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+                gap: 25px;
+            }
+            .header-content h1 {
+                font-size: 2.5rem;
+            }
+            .header-content p {
+                font-size: 1rem;
+            }
+            h3 {
+                font-size: 1.6rem;
+            }
+            .section-block {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                border-radius: 12px;
+            }
+            .header-content h1 {
+                font-size: 2rem;
+            }
+            h3 {
+                font-size: 1.4rem;
+            }
+            p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+    <button class="btn btn-back" onclick="history.back()">← Back</button>
+
+    <div class="container">
+        <div class="header-content">
+            <h1>Welcome to NutriMeal 🍏🥕</h1>
+            <p>Your ultimate destination for discovering, sharing, and creating healthy and delicious recipes tailored for every lifestyle and dietary need.</p>
+        </div>
+        
+        <div class="section-block">
+            <span class="icon">✨</span>
+            <h3>Our Purpose</h3>
+            <p>At NutriMeal, we're driven by the conviction that healthy eating should be both simple and joyful. We're here to bridge the gap between nutritional goals and culinary delight, offering a diverse array of recipes that cater to every taste and skill level. We empower you to make informed, delicious choices.</p>
+        </div>
+
+        <div class="section-block">
+            <span class="icon">🎯</span>
+            <h3>Our Mission</h3>
+            <p>Our mission is to cultivate a thriving global community where healthy food knowledge is freely shared and celebrated. We aim to connect home cooks, aspiring chefs, and nutrition enthusiasts, fostering an environment where innovative and wholesome recipes are easily accessible, inspiring a world of balanced diets.</p>
+        </div>
+
+        <div class="section-block">
+            <span class="icon">🔭</span>
+            <h3>Our Vision</h3>
+            <p>We envision NutriMeal as the leading digital platform for healthy cooking – a place where advanced technology meets culinary passion. We strive to continually innovate, offering personalized meal plans, smart ingredient suggestions, and a seamless user experience that makes healthy living not just achievable, but truly enjoyable.</p>
+        </div>
+        
+        
+        <div class="section-block">
+            <span class="icon">💖</span>
+            <h3>Join Our Growing Community</h3>
+            <p>Your journey to healthier eating is our inspiration. Join NutriMeal today to explore countless recipes, share your culinary creations, and become part of a supportive network that's passionate about food, health, and well-being. Together, let's savor the journey to a healthier, happier you!</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

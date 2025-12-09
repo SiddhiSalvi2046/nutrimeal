@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Culinary Masterpiece</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Updated Tailwind config with a food-themed color palette
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Main Action Color (Healthy/Fresh)
+                        'primary-green': '#38a169',
+                        'primary-hover': '#2f855a',
+                        // Warm Food Accent Color (Sun/Flavor)
+                        'accent-yellow': '#fbbf24', // Amber-500
+                        'accent-hover': '#f59e0b',  // Amber-600
+                        // Background Colors
+                        'light-bg': '#fffbeb', // Very light cream/yellow tint
+                        'input-border': '#e5e7eb',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for better textarea spacing and focus */
+        textarea, input:not([type="checkbox"]), select {
+            transition: all 0.2s;
+        }
+        /* Applying primary-green focus ring/border */
+        textarea:focus, input:focus:not([type="checkbox"]), select:focus {
+            border-color: #38a169;
+            box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-light-bg min-h-screen flex items-center justify-center p-4 font-sans">
+    <div class="upload-container">
+    <button class="btn btn-back" onclick="history.back()">← Back</button>
+    <div class="w-full max-w-2xl bg-white shadow-2xl rounded-xl p-8 md:p-10 border border-gray-100">
+        <header class="text-center mb-8">
+            <h2 class="text-4xl font-extrabold text-accent-yellow tracking-tight">
+                Share Your Recipe
+            </h2>
+            <p class="text-gray-600 mt-2">Document your culinary creation and help others cook!</p>
+        </header>
+        <form id="uploadForm" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="form-group">
+                    <label for="recipeName" class="block text-sm font-medium text-gray-700 mb-1">Recipe Name <span class="text-red-500">*</span></label>
+                    <input type="text" id="recipeName" required class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green">
+                </div>
+                <div class="form-group">
+                    <label for="serving" class="block text-sm font-medium text-gray-700 mb-1">Serves (Even Number of People) <span class="text-red-500">*</span></label>
+                    <input type="number" id="serving" min="2" value="4" step="2" required class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea id="description" rows="2" placeholder="A brief, engaging summary of the dish, its flavor, and history." class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none"></textarea>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 p-4 rounded-lg bg-yellow-50 border border-yellow-200">
+                <div class="form-group">
+                    <label for="category" class="block text-sm font-bold text-gray-800 mb-1">Category <span class="text-red-500">*</span></label>
+                    <select id="category" required class="w-full px-4 py-2 border border-input-border rounded-lg appearance-none bg-white focus:ring-primary-green focus:border-primary-green">
+                        <option value="">Select Category</option>
+                        <option value="Meal Type">Meal Type</option>
+                        <option value="Seasonal Recipes">Seasonal Recipes</option>
+                        <option value="Occasional Recipes">Occasional Recipes</option>
+                        <option value="One-pot / Easy cooking">One-pot / Easy Cooking</option>
+                        <option value="Veg / Non-Veg">Veg / Non-Veg</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subcategory" class="block text-sm font-bold text-gray-800 mb-1">Subcategory</label>
+                    <select id="subcategory" class="w-full px-4 py-2 border border-input-border rounded-lg appearance-none bg-white focus:ring-primary-green focus:border-primary-green disabled:bg-gray-100 disabled:text-gray-400" disabled>
+                        <option value="">Select Subcategory</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group full-width">
+                <label for="nutrition" class="block text-sm font-medium text-gray-700 mb-1">Nutritional Info:</label>
+                <textarea id="nutrition" placeholder="e.g., 400 Calories, 25g Protein, 40g Carbs" required class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="ingredients" class="block text-sm font-medium text-gray-700 mb-1">Ingredients <span class="text-red-500">*</span></label>
+                <textarea id="ingredients" rows="4" placeholder="List each ingredient and quantity on a new line (e.g., 2 large eggs, 1 cup flour)." required class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="instructions" class="block text-sm font-medium text-gray-700 mb-1">Instructions <span class="text-red-500">*</span></label>
+                <textarea id="instructions" rows="4" placeholder="Write out the steps clearly, one step per line." required class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none"></textarea>
+            </div>
+            <div class="form-group full-width">
+                <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image:</label>
+                <input type="file" id="image" accept="image/*" class="w-full px-4 py-2 border border-input-border rounded-lg focus:ring-primary-green focus:border-primary-green resize-none">
+            </div>
+            <button type="submit" id="submitButton" class="w-full py-3 px-6 text-white font-semibold rounded-lg shadow-md bg-primary-green hover:bg-primary-hover transition duration-150 ease-in-out transform hover:scale-[1.005]">
+                Submit Recipe
+            </button>
+        </form>
+        <div id="messageBox" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                <p id="messageText" class="text-lg font-medium text-gray-800"></p>
+                <button onclick="document.getElementById('messageBox').classList.add('hidden')" class="mt-4 px-4 py-2 bg-primary-green text-white rounded-lg hover:bg-primary-hover">Close</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Data structure for subcategories
+        const CATEGORY_MAP = {
+            "Meal Type": ["Breakfast ", "Lunch ", "Dinner ", "Snacks ", "Desserts "],
+            "Seasonal Recipes": ["Summer ", "Winter ", "Spring ", "Autumn "],
+            "Occasional Recipes": ["Festivals ", "Parties ", "Quick Weeknight Meals "],
+            "One-pot / Easy cooking": ["One-Pot Meals", "30-Minute Recipes ", "Slow Cooker / Instant Pot"],
+            "Veg / Non-Veg": ["Vegetarian ", "Non-Vegetarian ", "Egg-based "]
+        };
+
+        const categorySelect = document.getElementById("category");
+        const subcategorySelect = document.getElementById("subcategory");
+
+        // Function to show custom alert (replaces window.alert)
+        function showMessage(text) {
+            document.getElementById('messageText').textContent = text;
+            document.getElementById('messageBox').classList.remove('hidden');
+        }
+
+        // Event listener for category change to update subcategories
+        categorySelect.addEventListener("change", () => {
+            const selected = categorySelect.value;
+            const subs = CATEGORY_MAP[selected] || [];
+            
+            subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+            subcategorySelect.disabled = !selected; // Disable if no category is selected
+
+            subs.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s;
+                opt.textContent = s;
+                subcategorySelect.appendChild(opt);
+            });
+        });
+
+        // Form submission handler
+        document.getElementById("uploadForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // ✅ Check for token right away
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                showMessage("Your login session has expired. Please log in again.");
+                return; // Stop submission if token is missing
+            }
+
+            const recipeData = {
+                name: document.getElementById("recipeName").value,
+                description: document.getElementById("description").value, 
+                serving: parseInt(document.getElementById("serving").value, 10), 
+                category: categorySelect.value,
+                subcategory: subcategorySelect.value,
+                ingredients: document.getElementById("ingredients").value.split("\n").filter(line => line.trim() !== ''),
+                instructions: document.getElementById("instructions").value.split("\n").filter(line => line.trim() !== '')
+            };
+            
+            // --- UPDATED VALIDATION LOGIC ---
+            // 1. Check if serving size is a valid number greater than or equal to 2.
+            if (recipeData.serving < 2 || isNaN(recipeData.serving)) {
+                showMessage("Serving size must be a number greater than or equal to 2.");
+                return;
+            }
+
+            // 2. Check if the serving size is an even number.
+            if (recipeData.serving % 2 !== 0) {
+                 showMessage("Serving size must be an **even number** (e.g., 2, 4, 6, 8, etc.).");
+                 return;
+            }
+            // --- END VALIDATION LOGIC ---
+
+
+            // Disable button and show loading state
+            const submitButton = document.getElementById("submitButton");
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+
+    try {
+    const res = await fetch('/api/recipes/upload', {
+        method: 'POST',
+        headers: {
+            // 🛑 FIX: Change 'token' to 'auth_token' to match the key used in app.js
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`, 
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(recipeData)
+    });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            showMessage("Recipe submitted successfully! Await admin approval.");
+            document.getElementById("uploadForm").reset();
+            subcategorySelect.disabled = true;
+        } else {
+            showMessage(data.error || "Failed to submit recipe.");
+        }
+    } catch (err) {
+        console.error(err);
+        showMessage("Network error. Please try again.");
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Recipe';
+    }
+});
+    </script>
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Modal Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* ------------------------------------- */
+        /* --- Aesthetic Recipe Colour Palette --- */
+        /* ------------------------------------- */
+        :root {
+            --color-primary: #1F2837;      /* Deep Navy/Charcoal */
+            --color-accent: #E06C4C;       /* Warm Terracotta/Burnt Orange */
+            --color-light: #F8F8F8;        /* Near-White background */
+            --color-text-dark: #333;
+            --color-text-light: #fff;
+            --color-border: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* ------------------------------------- */
+        /* --- Header and Profile Icon Style --- */
+        /* ------------------------------------- */
+        header {
+            background-color: var(--color-primary);
+            color: var(--color-light);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-icon-container {
+            cursor: pointer;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .profile-avatar, .profile-avatar-icon { /* Targets both the image and the icon */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-accent);
+    background-color: var(--color-light); /* Added background for icons */
+    display: flex; /* Changed to flex to center the icon */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em; /* Makes the icon visible inside the circle */
+}
+
+        /* ------------------------------------- */
+        /* --- Modal Overlay & Background --- */
+        /* ------------------------------------- */
+        .modal-overlay {
+            display: none; /* Initially hidden */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Darker backdrop */
+            /* Centers the modal in the middle of the screen */
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* ------------------------------------- */
+        /* --- Modal Content Box --- */
+        /* ------------------------------------- */
+        .modal-content {
+            background-color: var(--color-light);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 350px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ------------------------------------- */
+        /* --- Modal Internal Elements --- */
+        /* ------------------------------------- */
+        .modal-header {
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+        .close-button {
+            color: var(--color-text-dark);
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-button:hover {
+            color: var(--color-accent);
+        }
+
+        /* Avatar Section */
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .large-avatar-placeholder {
+            width: 90px;
+            height: 90px;
+            background-color: #eee;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--color-primary);
+            border: 3px solid var(--color-primary);
+        }
+
+        .upload-btn {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: #3f4a5c;
+        }
+
+        /* User Detail Section */
+        .user-detail-section {
+            padding: 0 10px;
+        }
+        .user-detail-section p {
+            margin-bottom: 10px;
+            padding: 8px 0;
+            color: var(--color-text-dark);
+            border-bottom: 1px dashed var(--color-border);
+            line-height: 1.4;
+        }
+        .user-detail-section strong {
+            color: var(--color-primary);
+            min-width: 60px;
+            display: inline-block;
+        }
+        /* --- New Styles for Edit Form --- */
+#editMode label {
+    display: block;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+    text-align: left; /* Align labels left */
+}
+#editMode input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box; 
+}
+/* Ensure view mode content maintains some spacing */
+#viewMode p {
+    text-align: left; 
+}
+
+
+        /* Action Buttons */
+        .modal-actions {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            text-align: center;
+            padding: 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s, border-color 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: block; /* Ensure links take full width */
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--color-text-light);
+        }
+
+        .btn-primary:hover {
+            background-color: #c75c3d;
+        }
+
+        .btn-secondary {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: #3f4a5c;
+        }
+
+        .btn-logout {
+            background-color: var(--color-light);
+            color: var(--color-text-dark);
+            border: 1px solid var(--color-text-dark);
+        }
+
+        .btn-logout:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="profile-icon-container" onclick="toggleProfileModal()">
+            <img src="https://via.placeholder.com/40/E06C4C/FFFFFF?text=A" alt="User Avatar" class="profile-avatar">
+        </div>
+    </header>
+    <div id="profileModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="toggleProfileModal()">&times;</span>
+            <h3 class="modal-header">My Profile</h3>
+<div class="avatar-section">
+    <div class="large-avatar-placeholder">
+        <i class="fas fa-user"></i>
+    </div>
+    <button class="upload-btn" onclick="handleAvatarUpload()">Upload/Change Picture</button>
+</div>
+<div class="user-detail-section">
+    <p>
+        <label for="profileName"><strong>Name:</strong></label>
+        <input type="text" id="profileName" value="Current User" disabled>
+    </p>
+    <p>
+        <label for="profileEmail"><strong>Email:</strong></label>
+        <input type="email" id="profileEmail" value="user@example.com" disabled>
+    </p>
+</div>
+<div class="modal-actions">
+    <button class="btn btn-primary" id="editSaveButton" onclick="toggleEditMode(this)">Edit Profile</button>
+    <button class="btn btn-logout" onclick="logoutUser()">Log Out</button>
+</div>
+        </div>
+    </div>
+
+    <script>
+    // 1. SIMULATED USER DATA & STATE
+// In a real app, this would be fetched from the server.
+// We are using localStorage to simulate "who is logged in."
+const userData = {
+    // Attempt to load username/email from a session/storage, 
+    // or use a generic default if they don't exist.
+    name: localStorage.getItem("username") || "Guest User", 
+    email: localStorage.getItem("userEmail") || "guest@example.com"
+};
+
+// --- CORE FUNCTIONS ---
+
+// Function to load user data into the modal inputs
+function loadUserData() {
+    const nameInput = document.getElementById('profileName');
+    const emailInput = document.getElementById('profileEmail');
+
+    if (nameInput && emailInput) {
+        // This is the line that ensures the inputs show the dynamic data!
+        nameInput.value = userData.name;
+        emailInput.value = userData.email;
+    }
+}
+
+// Function to toggle between View (disabled) and Edit (enabled) modes
+function toggleEditMode(button) {
+    const nameInput = document.getElementById('profileName');
+    const emailInput = document.getElementById('profileEmail');
+    
+    // Safety check: only proceed if elements exist
+    if (!nameInput || !emailInput) return; 
+
+    if (button.textContent === 'Edit Profile') {
+        // ENTER EDIT MODE
+        nameInput.disabled = false;
+        emailInput.disabled = false;
+        button.textContent = 'Save Changes';
+        button.classList.remove('btn-primary');
+        button.classList.add('btn-secondary'); 
+        nameInput.focus();
+    } else {
+        // SAVE CHANGES (Exit Edit Mode)
+        
+        // --- 🔑 REAL INTEGRATION POINT: BACKEND API CALL GOES HERE ---
+        // For now, we update the local 'userData' object and localStorage
+        const newName = nameInput.value.trim();
+        const newEmail = emailInput.value.trim();
+        
+        if (!newName || !newEmail) {
+            alert("Name and Email cannot be empty.");
+            return;
+        }
+
+        // Simulate save: Update local object and local storage
+        userData.name = newName;
+        userData.email = newEmail;
+        localStorage.setItem("username", newName);
+        localStorage.setItem("userEmail", newEmail); 
+
+        // Lock the fields and revert the button
+        nameInput.disabled = true;
+        emailInput.disabled = true;
+        button.textContent = 'Edit Profile';
+        button.classList.remove('btn-secondary');
+        button.classList.add('btn-primary'); 
+        
+        alert(`Profile updated successfully! Welcome, ${newName}.`);
+    }
+}
+
+
+// --- MODAL & LOGOUT FUNCTIONS ---
+
+function toggleProfileModal() {
+    const modal = document.getElementById('profileModal');
+    if (modal.style.display !== "flex") {
+        // Ensure latest user data is loaded right before opening
+        loadUserData();       
+        modal.style.display = "flex";
+    } else {
+        modal.style.display = "none";
+    }
+}
+
+function logoutUser() {
+    // Clear user data from storage and redirect
+    localStorage.removeItem("username");
+    localStorage.removeItem("userEmail"); // <-- New line to clear email
+    toggleProfileModal();
+    window.location.href = "index.html";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('profileModal');
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+
+// --- INITIALIZATION ---
+
+// 🔑 THE FIX: Call loadUserData() immediately to set the inputs 
+// when the page loads, using data from localStorage.
+document.addEventListener('DOMContentLoaded', () => {
+    // Your existing profile menu logic
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+    const logoutLink = document.getElementById('logout');
+    
+    if (profileIcon && profileMenu) {
+        profileIcon.addEventListener('click', (event) => {
+            profileMenu.classList.toggle('show');
+            event.stopPropagation();
+        });
+    }
+
+    // Your existing logout link logic
+    logoutLink?.addEventListener('click', (event) => {
+        event.preventDefault();
+        logoutUser(); // Use the consolidated logout function
+    });
+    
+    // Existing window click logic (for menu dropdown, if applicable)
+    window.addEventListener('click', (event) => {
+        if (profileMenu && profileIcon && !profileMenu.contains(event.target) && !profileIcon.contains(event.target)) {
+             if (profileMenu.classList.contains('show')) {
+                 profileMenu.classList.remove('show');
+             }
+         }
+    });
+
+    // We no longer rely on DOMContentLoaded for the modal's data load, 
+    // as it's loaded right before the modal is toggled.
+});
+
+// We must also call it here just in case the profile modal is visible from the start
+loadUserData();
+</script>
+</body>
+</html>

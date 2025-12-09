@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Admin Dashboard</title>
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --alert-color: #ffc107;
+            --text-color: #333;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: var(--bg-light);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            font-size: 1.5rem;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+        }
+
+        .content-area h1 {
+            margin-bottom: 30px;
+            color: #212529;
+        }
+
+        .alert-card {
+            background-color: var(--alert-color);
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-card h3 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .alert-card .count {
+            font-size: 2rem;
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 5px 15px;
+            border-radius: 4px;
+        }
+
+        .management-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .management-table th, .management-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .management-table th {
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .management-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .admin-view table {
+            width: 100%;
+            border-collapse: collapse; 
+        }
+
+        .admin-view th {
+            text-align: left; 
+            border-bottom: 2px solid #e2e8f0; 
+        }
+
+        .admin-view td {
+            border-bottom: 1px solid #f3f4f6; 
+            vertical-align: top;
+        }
+
+        .admin-view th:nth-child(5), 
+        .admin-view td:nth-child(5),
+        .admin-view th:nth-child(6), 
+        .admin-view td:nth-child(6) {
+        text-align: center;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-right: 5px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-approve { background-color: var(--success-color); color: white; }
+        .btn-reject { background-color: var(--danger-color); color: white; }
+        .btn-view { background-color: var(--primary-color); color: white; }
+        
+        .btn-approve:hover { background-color: #1e7e34; transform: translateY(-1px); }
+        .btn-reject:hover { background-color: #c82333; transform: translateY(-1px); }
+        .btn-view:hover { background-color: #0056b3; transform: translateY(-1px); }
+
+        .loading-message {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 20px;
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+        .hidden {
+            display: none !important; 
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+    <h2>Recipe Admin</h2>
+    <nav>
+        <a href="#" id="dashboard-link" class="sidebar-link active">Dashboard</a>
+        <a href="#" id="pending-link" class="sidebar-link">Pending Recipes</a>
+        <a href="#" id="all-recipes-link" class="sidebar-link">All Recipes</a>
+        <a href="#" id="users-link" class="sidebar-link">Users</a>
+        <a href="#" id="queries-link" class="sidebar-link">Queries</a>
+        <a href="#" id="logout-btn" >Logout</a>
+    </nav>
+</div>
+    <div class="content-area">
+    <section id="dashboard-view" class="content-section">
+      <h1>Dashboard Overview</h1>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Pending Recipes</h3>
+          <p id="pending-count">0</p>
+        </div>
+        <div class="card">
+          <h3>All Recipes</h3>
+          <p id="all-count">0</p>
+        </div>
+        <div class="card">
+          <h3>Users</h3>
+          <p id="users-count">0</p>
+        </div>
+        <div class="card">
+          <h3>Queries</h3>
+          <p id="queries-count">0</p>
+        </div>  
+      </div>
+    </section>
+    <section id="pending-view" class="content-section hidden"> 
+        <h1>Pending Recipes for Approval</h1>
+        <table class="management-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Title</th>
+                    <th>Cuisine / Category</th>
+                    <th>Submitted By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="pending-full-table-body">
+                <td colspan="5" class="loading-message">Click 'Pending Recipes' to load...</td>
+            </tbody>
+        </table>
+    </section>
+    <section id="all-recipes-view" class="content-section hidden"> 
+        <h1>All Approved Recipes</h1>
+        <div id="all-recipes-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <p class="loading-message" style="grid-column: 1 / -1;">All recipes will be loaded here...</p>
+        </div>
+    </section>
+    <section id="users-view" class="content-section hidden"> 
+        <h1>User Management</h1>
+        <table class="management-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Signed Up</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="users-table-body"> 
+                <td colspan="6" class="loading-message">User data will be loaded here...</td>
+            </tbody>
+        </table>
+    </section>
+    <section id="queries-view" class="content-section hidden"> 
+    <h1>User Queries / Contact Forms</h1>
+    <table class="queries-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Created at</th>
+            </tr>
+        </thead>
+        <tbody id="queries-table-body">
+            <tr>
+                <td colspan="6" class="text-center py-3 loading-queries">User queries will be loaded here...</td>
+            </tr>
+        </tbody>
+    </table>
+    </section>
+</div>
+<script src="admin.js"></script>
+</body>
+</html>
